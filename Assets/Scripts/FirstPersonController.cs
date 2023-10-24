@@ -111,7 +111,7 @@ namespace StarterAssets
 		}
 
 		private void Update()
-		{
+		{	
 			JumpAndGravity();
 			GroundedCheck();
 			Move();
@@ -122,7 +122,21 @@ namespace StarterAssets
 			CameraRotation();
 		}
 
-		private void GroundedCheck()
+        // on click check what is clicking!
+        // CALLED IN StarterAssestsInputs when clicking
+        public void FindObjType()
+        {
+			if (Physics.Raycast(_mainCamera.transform.localPosition, _mainCamera.transform.TransformDirection(Vector3.forward), out RaycastHit hitInfo))
+			{
+				if (hitInfo.collider.tag == "Untagged") return;
+				Debug.Log(hitInfo.collider.tag);
+			}
+		}
+			
+
+   
+
+        private void GroundedCheck()
 		{
 			// set sphere position, with offset
 			Vector3 spherePosition = new Vector3(transform.position.x, transform.position.y - GroundedOffset, transform.position.z);

@@ -12,7 +12,7 @@ namespace StarterAssets
 		public Vector2 look;
 		public bool jump;
 		public bool sprint;
-
+		
 		[Header("Movement Settings")]
 		public bool analogMovement;
 
@@ -20,8 +20,16 @@ namespace StarterAssets
 		public bool cursorLocked = true;
 		public bool cursorInputForLook = true;
 
+		[Header("Player Controller...")]
+		public FirstPersonController fpc = null;
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
-		public void OnMove(InputValue value)
+
+		private void Start()
+		{
+			fpc = GetComponent<FirstPersonController>();
+
+    }
+    public void OnMove(InputValue value)
 		{
 			MoveInput(value.Get<Vector2>());
 		}
@@ -42,6 +50,14 @@ namespace StarterAssets
 		public void OnSprint(InputValue value)
 		{
 			SprintInput(value.isPressed);
+		}
+
+		public void OnInteract(InputValue value)
+		{
+			if (value.isPressed)
+			{
+				fpc.FindObjType();
+			}
 		}
 #endif
 
