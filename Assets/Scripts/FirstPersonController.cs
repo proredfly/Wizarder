@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Unity.VisualScripting;
+using UnityEngine;
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
 using UnityEngine.InputSystem;
 #endif
@@ -59,7 +60,7 @@ namespace StarterAssets
 		private float _rotationVelocity;
 		private float _verticalVelocity;
 		private float _terminalVelocity = 53.0f;
-
+		public bool isClimbing = false;
 		// timeout deltatime
 		private float _jumpTimeoutDelta;
 		private float _fallTimeoutDelta;
@@ -71,6 +72,7 @@ namespace StarterAssets
 		private CharacterController _controller;
 		private StarterAssetsInputs _input;
 		private GameObject _mainCamera;
+		private ClimbingManager cManager;
 
 		private const float _threshold = 0.01f;
 
@@ -98,6 +100,7 @@ namespace StarterAssets
 		private void Start()
 		{
 			_controller = GetComponent<CharacterController>();
+			cManager = GetComponent<ClimbingManager>();
 			_input = GetComponent<StarterAssetsInputs>();
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
 			_playerInput = GetComponent<PlayerInput>();
@@ -128,8 +131,17 @@ namespace StarterAssets
         {
 			if (Physics.Raycast(_mainCamera.transform.localPosition, _mainCamera.transform.TransformDirection(Vector3.forward), out RaycastHit hitInfo))
 			{
-				if (hitInfo.collider.tag == "Untagged") return;
-				Debug.Log(hitInfo.collider.tag);
+				if(hitInfo.collider.tag.Equals("Untagged")) return;
+				if (hitInfo.collider.tag.Equals("ClimbingHold"))
+				{
+					if (!isClimbing)
+					{
+						cManager.InitiateClimbing(hitInfo.collider.gameObject.GetComponent<Hold>().holdNum);
+					} else
+					{
+						cManager.NewHold(hitInfo.collider.gameObject.GetComponent<Hold>().holdNum);
+					}
+				}
 			}
 		}
 			
@@ -198,11 +210,21 @@ namespace StarterAssets
 			}
 
 			// normalise input direction
-			Vector3 inputDirection = new Vector3(_input.move.x, 0.0f, _input.move.y).normalized;
+			Vector3 inputDirection;
+			//"disable input" if climbing
+            if (!isClimbing)
+			{
+                inputDirection = new Vector3(_input.move.x, 0.0f, _input.move.y).normalized;
+            }
+			else
+			{
+                inputDirection = new Vector3(0.0f,0.0f,0.0f).normalized;
+            }
+
 
 			// note: Vector2's != operator uses approximation so is not floating point error prone, and is cheaper than magnitude
 			// if there is a move input rotate player when the player is moving
-			if (_input.move != Vector2.zero)
+			if (_input.move != Vector2.zero && !isClimbing)
 			{
 				// move
 				inputDirection = transform.right * _input.move.x + transform.forward * _input.move.y;
@@ -214,49 +236,57 @@ namespace StarterAssets
 
 		private void JumpAndGravity()
 		{
-			if (Grounded)
+			//disable everything if not climbing
+			if (!isClimbing)
 			{
-				// reset the fall timeout timer
-				_fallTimeoutDelta = FallTimeout;
-
-				// stop our velocity dropping infinitely when grounded
-				if (_verticalVelocity < 0.0f)
+				if (Grounded)
 				{
-					_verticalVelocity = -2f;
+					// reset the fall timeout timer
+					_fallTimeoutDelta = FallTimeout;
+
+					// stop our velocity dropping infinitely when grounded
+					if (_verticalVelocity < 0.0f)
+					{
+						_verticalVelocity = -2f;
+					}
+
+					// Jump
+					if (_input.jump && _jumpTimeoutDelta <= 0.0f)
+					{
+						// the square root of H * -2 * G = how much velocity needed to reach desired height
+						_verticalVelocity = Mathf.Sqrt(JumpHeight * -2f * Gravity);
+					}
+
+					// jump timeout
+					if (_jumpTimeoutDelta >= 0.0f)
+					{
+						_jumpTimeoutDelta -= Time.deltaTime;
+					}
+				}
+				else
+				{
+					// reset the jump timeout timer
+					_jumpTimeoutDelta = JumpTimeout;
+
+					// fall timeout
+					if (_fallTimeoutDelta >= 0.0f)
+					{
+						_fallTimeoutDelta -= Time.deltaTime;
+					}
+
+					// if we are not grounded, do not jump
+					_input.jump = false;
 				}
 
-				// Jump
-				if (_input.jump && _jumpTimeoutDelta <= 0.0f)
+				// apply gravity over time if under terminal (multiply by delta time twice to linearly speed up over time)
+				if (_verticalVelocity < _terminalVelocity)
 				{
-					// the square root of H * -2 * G = how much velocity needed to reach desired height
-					_verticalVelocity = Mathf.Sqrt(JumpHeight * -2f * Gravity);
-				}
-
-				// jump timeout
-				if (_jumpTimeoutDelta >= 0.0f)
-				{
-					_jumpTimeoutDelta -= Time.deltaTime;
+					_verticalVelocity += Gravity * Time.deltaTime;
 				}
 			}
 			else
-			{
-				// reset the jump timeout timer
-				_jumpTimeoutDelta = JumpTimeout;
-
-				// fall timeout
-				if (_fallTimeoutDelta >= 0.0f)
-				{
-					_fallTimeoutDelta -= Time.deltaTime;
-				}
-
-				// if we are not grounded, do not jump
-				_input.jump = false;
-			}
-
-			// apply gravity over time if under terminal (multiply by delta time twice to linearly speed up over time)
-			if (_verticalVelocity < _terminalVelocity)
-			{
-				_verticalVelocity += Gravity * Time.deltaTime;
+			{ //if not climbing
+				_verticalVelocity = 0.0f;
 			}
 		}
 

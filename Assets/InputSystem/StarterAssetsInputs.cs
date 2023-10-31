@@ -22,11 +22,13 @@ namespace StarterAssets
 
 		[Header("Player Controller...")]
 		public FirstPersonController fpc = null;
+		public ClimbingManager cManager = null;
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
 
 		private void Start()
 		{
 			fpc = GetComponent<FirstPersonController>();
+			cManager = GetComponent<ClimbingManager>();
 
     }
     public void OnMove(InputValue value)
@@ -59,10 +61,18 @@ namespace StarterAssets
 				fpc.FindObjType();
 			}
 		}
+
+        public void OnInteractTwo(InputValue value)
+        {
+            if (value.isPressed)
+            {
+                cManager.ExitClimbing();
+            }
+        }
 #endif
 
 
-		public void MoveInput(Vector2 newMoveDirection)
+        public void MoveInput(Vector2 newMoveDirection)
 		{
 			move = newMoveDirection;
 		} 
