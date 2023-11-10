@@ -12,7 +12,8 @@ namespace StarterAssets
 #endif
 	public class FirstPersonController : MonoBehaviour
 	{
-		[Header("Player")]
+        #region Setup
+        [Header("Player")]
 		[Tooltip("Move speed of the character in m/s")]
 		public float MoveSpeed = 4.0f;
 		[Tooltip("Sprint speed of the character in m/s")]
@@ -60,7 +61,7 @@ namespace StarterAssets
 		private float _rotationVelocity;
 		private float _verticalVelocity;
 		private float _terminalVelocity = 53.0f;
-		public bool isClimbing = false;
+		public bool climbing = false;
 		// timeout deltatime
 		private float _jumpTimeoutDelta;
 		private float _fallTimeoutDelta;
@@ -112,8 +113,10 @@ namespace StarterAssets
 			_jumpTimeoutDelta = JumpTimeout;
 			_fallTimeoutDelta = FallTimeout;
 		}
+        #endregion
 
-		private void Update()
+        #region Updates
+        private void Update()
 		{	
 			JumpAndGravity();
 			GroundedCheck();
@@ -124,6 +127,7 @@ namespace StarterAssets
 		{
 			CameraRotation();
 		}
+        #endregion
 
         // on click check what is clicking!
         // CALLED IN StarterAssestsInputs when clicking
@@ -131,23 +135,27 @@ namespace StarterAssets
         {
 			if (Physics.Raycast(_mainCamera.transform.localPosition, _mainCamera.transform.TransformDirection(Vector3.forward), out RaycastHit hitInfo))
 			{
-				if(hitInfo.collider.tag.Equals("Untagged")) return;
-				if (hitInfo.collider.tag.Equals("ClimbingHold"))
+				if(hitInfo.collider.CompareTag("Untagged")) return;
+				//climbing stuff
+				if (hitInfo.collider.CompareTag("ClimbingHold"))
 				{
-					if (!isClimbing)
+					if (Vector3.Distance(hitInfo.transform.position, _mainCamera.transform.position) <= 5)
 					{
-						cManager.InitiateClimbing(hitInfo.collider.gameObject.GetComponent<Hold>().holdNum);
+						if (!climbing)
+						{
+							cManager.InitiateClimbing(hitInfo.collider.gameObject.GetComponent<Hold>().holdNum);
+						} else
+						{
+							cManager.NewHold(hitInfo.collider.gameObject.GetComponent<Hold>().holdNum);
+						}
 					} else
 					{
-						cManager.NewHold(hitInfo.collider.gameObject.GetComponent<Hold>().holdNum);
-					}
+                        if (hitInfo.collider.GetComponent<Hold>().startColor != Color.red) hitInfo.collider.GetComponent<Hold>().endColor = Color.red;
+                    }
 				}
 			}
 		}
 			
-
-   
-
         private void GroundedCheck()
 		{
 			// set sphere position, with offset
@@ -212,7 +220,7 @@ namespace StarterAssets
 			// normalise input direction
 			Vector3 inputDirection;
 			//"disable input" if climbing
-            if (!isClimbing)
+            if (!climbing)
 			{
                 inputDirection = new Vector3(_input.move.x, 0.0f, _input.move.y).normalized;
             }
@@ -224,7 +232,7 @@ namespace StarterAssets
 
 			// note: Vector2's != operator uses approximation so is not floating point error prone, and is cheaper than magnitude
 			// if there is a move input rotate player when the player is moving
-			if (_input.move != Vector2.zero && !isClimbing)
+			if (_input.move != Vector2.zero && !climbing)
 			{
 				// move
 				inputDirection = transform.right * _input.move.x + transform.forward * _input.move.y;
@@ -237,7 +245,7 @@ namespace StarterAssets
 		private void JumpAndGravity()
 		{
 			//disable everything if not climbing
-			if (!isClimbing)
+			if (!climbing)
 			{
 				if (Grounded)
 				{

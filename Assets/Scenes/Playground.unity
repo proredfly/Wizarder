@@ -160,6 +160,12 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!136 &302297173 stripped
+CapsuleCollider:
+  m_CorrespondingSourceObject: {fileID: 5393215578589016640, guid: c5efc39a8aaf6e64ea40e9ad573e9b47,
+    type: 3}
+  m_PrefabInstance: {fileID: 5393215579111688471}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &542508511
 GameObject:
   m_ObjectHideFlags: 0
@@ -234,7 +240,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 543306718}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Hold001Pos
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -685,7 +691,7 @@ GameObject:
   - component: {fileID: 1085006529}
   - component: {fileID: 1085006528}
   - component: {fileID: 1085006527}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Hold002
   m_TagString: ClimbingHold
   m_Icon: {fileID: 0}
@@ -700,7 +706,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1085006525}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -1.77, y: 7.28, z: 3.64}
+  m_LocalPosition: {x: -2.67, y: 6.3, z: 3.64}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -720,7 +726,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c565db9c1b93a08428ccbab1853d49d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  r: {fileID: 1085006529}
+  speed: 5
   holdNum: 2
+  startColor: {r: 1, g: 1, b: 1, a: 0}
+  endColor: {r: 1, g: 1, b: 1, a: 0}
+  startTime: 0
 --- !u!65 &1085006528
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -754,7 +765,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: 2264daf26a5d517409e69e8ca2a519d6, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -836,7 +847,7 @@ GameObject:
   - component: {fileID: 1331434121}
   - component: {fileID: 1331434120}
   - component: {fileID: 1331434123}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Hold000
   m_TagString: ClimbingHold
   m_Icon: {fileID: 0}
@@ -851,7 +862,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1331434118}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -3, y: 3, z: 8.5}
+  m_LocalPosition: {x: -3, y: 3, z: 9.9}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -892,7 +903,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: 2264daf26a5d517409e69e8ca2a519d6, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -934,7 +945,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c565db9c1b93a08428ccbab1853d49d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  r: {fileID: 1331434121}
+  speed: 5
   holdNum: 0
+  startColor: {r: 1, g: 1, b: 1, a: 0}
+  endColor: {r: 1, g: 1, b: 1, a: 0}
+  startTime: 0
 --- !u!1 &1416395677
 GameObject:
   m_ObjectHideFlags: 0
@@ -948,7 +964,7 @@ GameObject:
   - component: {fileID: 1416395681}
   - component: {fileID: 1416395680}
   - component: {fileID: 1416395679}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Hold001
   m_TagString: ClimbingHold
   m_Icon: {fileID: 0}
@@ -963,7 +979,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1416395677}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.97, y: 4.64, z: 6.27}
+  m_LocalPosition: {x: 0.21, y: 4.64, z: 7.67}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -983,7 +999,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c565db9c1b93a08428ccbab1853d49d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  r: {fileID: 1416395681}
+  speed: 5
   holdNum: 1
+  startColor: {r: 1, g: 1, b: 1, a: 0}
+  endColor: {r: 1, g: 1, b: 1, a: 0}
+  startTime: 0
 --- !u!65 &1416395680
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1017,7 +1038,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: 2264daf26a5d517409e69e8ca2a519d6, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1121,7 +1142,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1886016734}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Hold002Pos
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1152,7 +1173,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1933292795}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Hold000Pos
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1641,6 +1662,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 5393215578589016640, guid: c5efc39a8aaf6e64ea40e9ad573e9b47,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5420857361349278248, guid: c5efc39a8aaf6e64ea40e9ad573e9b47,
         type: 3}
       propertyPath: m_Enabled
@@ -1650,6 +1676,11 @@ PrefabInstance:
         type: 3}
       propertyPath: SprintSpeed
       value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 8616685848737228371, guid: c5efc39a8aaf6e64ea40e9ad573e9b47,
+        type: 3}
+      propertyPath: GroundLayers.m_Bits
+      value: 1537
       objectReference: {fileID: 0}
     - target: {fileID: 8616685848737228372, guid: c5efc39a8aaf6e64ea40e9ad573e9b47,
         type: 3}
@@ -1771,6 +1802,8 @@ MonoBehaviour:
   - {fileID: 1416395677}
   - {fileID: 1085006525}
   currentHold: 0
+  capsule: {fileID: 302297173}
+  speed: 10
 --- !u!1001 &7288094137546172433
 PrefabInstance:
   m_ObjectHideFlags: 0

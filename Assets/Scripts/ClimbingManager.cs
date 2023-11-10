@@ -8,12 +8,15 @@ using UnityEngine.InputSystem;
 
 public class ClimbingManager : MonoBehaviour
 {
-    [SerializeField] public GameObject[] holds;
+    public GameObject[] holds;
     public int currentHold;
     CharacterController cc;
     FirstPersonController fpc;
+    public CapsuleCollider capsule;
+    public float speed;
     Vector3 desiredPosition;
     bool climbing = false;
+    
     private void Start()
     {
         cc = GetComponent<CharacterController>();
@@ -22,35 +25,59 @@ public class ClimbingManager : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if(Math.Abs(Vector3.Distance(desiredPosition, cc.transform.position)) >= 0 && climbing)
+        //make sure position is the "desired position"
+        if (climbing)
         {
-            cc.transform.position = desiredPosition;
+            MoveTowardsTarget(desiredPosition);
         }
     }
+    
+
+    //move towards the target position
+    public void MoveTowardsTarget(Vector3 dp)
+    {
+        Vector3 offset = dp - cc.transform.position;
+        if (offset.magnitude > 0.1f)
+        {
+            offset = offset.normalized * speed;
+            cc.Move(offset * Time.deltaTime);
+        }
+
+        
+    }
+
+    //start climbing and set necessary variables and call necessary methods
     public void InitiateClimbing(int h)
     {
         climbing = true;
-        fpc.isClimbing = true;
+        Physics.IgnoreLayerCollision(8, 10);
+        capsule.enabled = false;
+        fpc.climbing = true;
         currentHold = h;
         GoToHold(h);
 
     }
 
+    //self explanatory
     public void NewHold(int h)
     {
         currentHold = h;
         GoToHold(h);
     }
 
+    //changes variables!
     public void ExitClimbing()
     {
         if (climbing)
         {
+            capsule.enabled = true;
+            Physics.IgnoreLayerCollision(8, 10, false);
             climbing = false;
-            fpc.isClimbing = false;
+            fpc.climbing = false;
         }
     }
        
+    //sets the desired position
     public void GoToHold(int h)
     {
         desiredPosition = holds[h].transform.GetChild(0).transform.position;
