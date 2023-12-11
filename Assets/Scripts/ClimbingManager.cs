@@ -37,6 +37,7 @@ public class ClimbingManager : MonoBehaviour
     public void MoveTowardsTarget(Vector3 dp)
     {
         Vector3 offset = dp - cc.transform.position;
+        
         if (offset.magnitude > 0.1f)
         {
             offset = offset.normalized * speed;

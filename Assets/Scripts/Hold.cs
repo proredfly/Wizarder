@@ -24,7 +24,7 @@ public class Hold : MonoBehaviour
     {
         
         // enable particle system on hold if close enough
-        if(Vector3.Distance(transform.position, _mainCamera.transform.position) <= 5)
+        if(Vector3.Distance(transform.position, _mainCamera.transform.position) <= 3)
         {
             var eTemp = GetComponentInChildren<ParticleSystem>().emission;
             eTemp.enabled = true;

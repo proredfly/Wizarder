@@ -139,7 +139,7 @@ namespace StarterAssets
 				//climbing stuff
 				if (hitInfo.collider.CompareTag("ClimbingHold"))
 				{
-					if (Vector3.Distance(hitInfo.transform.position, _mainCamera.transform.position) <= 5)
+					if (Vector3.Distance(hitInfo.transform.position, _mainCamera.transform.position) <= 3)
 					{
 						if (!climbing)
 						{
